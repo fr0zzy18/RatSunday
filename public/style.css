@@ -1,0 +1,24 @@
+.board {
+  display: grid;
+  grid-template-columns: repeat(5, 120px);
+  grid-template-rows: repeat(5, 120px);
+  gap: 5px;
+}
+
+.cell {
+  border: 1px solid #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  user-select: none;
+  text-align: center;
+  padding: 4px;
+}
+
+.cell.marked {
+  background-color: #4caf50;
+  color: white;
+  text-decoration: line-through;
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BINGO</title>
+<link rel="stylesheet" href="style.css">
+<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+<h1>ПАЦЮДІЛЯ</h1>
+
+<div id="setup">
+  <h2>Виберіть слова для картки (5x5)</h2>
+  <label for="nickname">Ваш нікнейм:</label>
+  <input type="text" id="nickname" placeholder="Введіть нік">
+  <br><br>
+  <div id="word-selection"></div>
+  <button id="startGameBtn">Старт гри</button>
+</div>
+
+<div id="game" style="display:none;">
+  <h2 id="playerTitle"></h2>
+  <div id="playerBoard" class="board"></div>
+
+  <h2 id="opponentTitle"></h2>
+  <div id="opponentBoard" class="board"></div>
+
+  <p id="status"></p>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
