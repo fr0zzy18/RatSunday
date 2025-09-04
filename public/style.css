@@ -22,3 +22,13 @@
   color: white;
   text-decoration: line-through;
 }
+.game-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.board-section {
+  flex: 1;
+}
+
