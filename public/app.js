@@ -16,7 +16,10 @@ const allWords = [
   '"Just listen to my calls"',"Tank dies","Threatens to replace someone",'"It is not a rocket science"',"They are not popping defensives",
   "An argument about wipe reasons",'"Ress that noob"','"This is unacceptable guys"',"Checking dying logs",'"We can not keep play like this"',
   "Zergg dies",'"That deaths are completely avoidable"',"Some dumb Blizzard bug messed up Dread",'"How can you die to this mechanic"','"I will recruit a few more people"',
-  "Marko calling, Dread not saying anything","Dan is telling what he messed up",'"Come on Lich"',"An argument on boss strategy","Yacht"
+  "Marko calling, Dread not saying anything","Dan is telling what he messed up",'"Come on Lich"',"An argument on boss strategy","This X is a (total) joke",
+  "Just follow the fucking raid plan", "Dan dies", '"I fucking HATE weak auras"', '"Simply do not die"', '"This boss is so fucking boring"', "Dread rants about people not playing properly",
+  "Soob changed weak auras", "Wipe below 5%", "Tulula dies", "Dread blames Maxi", '"I do not make suck mistakes"', "Melon suggests another good strategy", "Boss dies",
+  "Wolfi late or absent without warning", "Someone leaves mid-raid with a scandal", "Katy Perry is mentioned", "Dread does not know boss mechanic", "Wrong BL", "Markos monitor is dead(again)"
 ];
 
 let playerCells = [];
@@ -36,7 +39,7 @@ allWords.forEach(word => {
     const checked = wordSelectionEl.querySelectorAll("input:checked").length;
     if (checked > 24) {
       checkbox.checked = false;
-      alert("Ви можете вибрати максимум 24 слова (центральна клітинка зайнята).");
+      alert("Only 24 options!");
     }
   });
 
@@ -52,7 +55,7 @@ allWords.forEach(word => {
 startBtn.onclick = () => {
   myNickname = nicknameInput.value.trim();
   if (!myNickname) {
-    alert("Будь ласка, введіть нікнейм!");
+    alert("Enter your name");
     return;
   }
 
@@ -60,7 +63,7 @@ startBtn.onclick = () => {
     .map(input => input.value);
 
   if(selectedWords.length !== 24){
-    alert("Оберіть рівно 24 слова! (25-та клітинка — EMPTY SPACE)");
+    alert("Pick 24 options");
     return;
   }
 
@@ -83,7 +86,7 @@ startBtn.onclick = () => {
   }
 
   // Заголовок для своєї картки
-  playerTitle.textContent = `Картка ${myNickname}`;
+  playerTitle.textContent = `Card ${myNickname}`;
 
   createBoard(playerBoardEl, playerBoard, playerCells, false);
 
@@ -137,8 +140,8 @@ socket.on('opponentBoard', ({ board, nickname }) => {
   opponentCells = [];
   createBoard(opponentBoardEl, board, opponentCells, true);
 
-  opponentTitle.textContent = `Картка ${nickname}`;
-  statusEl.textContent = "Суперник підключився!";
+  opponentTitle.textContent = `Card ${nickname}`;
+  statusEl.textContent = "Someone connected!";
 });
 
 // Оновлення клітинки суперника
@@ -150,7 +153,7 @@ socket.on('opponentMark', (index) => {
 
 // Суперник відключився
 socket.on('opponentDisconnected', () => {
-  statusEl.textContent = "Суперник відключився.";
+  statusEl.textContent = "Someone disconnected.";
 });
 
 // Перевірка BINGO
@@ -161,21 +164,21 @@ function checkBingo(){
   // Горизонталі
   for(let i=0;i<size;i++){
     if(b.slice(i*size, i*size+size).every(Boolean)){
-      alert("BINGO! Ви виграли!");
+      alert("You win!");
       return;
     }
   }
   // Вертикалі
   for(let i=0;i<size;i++){
     if([...Array(size)].map((_,j)=>b[i+j*size]).every(Boolean)){
-      alert("BINGO! Ви виграли!");
+      alert("You win!");
       return;
     }
   }
   // Діагоналі
   if([...Array(size)].map((_,i)=>b[i*size+i]).every(Boolean) ||
      [...Array(size)].map((_,i)=>b[(i+1)*(size-1)]).every(Boolean)){
-    alert("BINGO! Ви виграли!");
+    alert("You win!");
     return;
   }
 }
