@@ -128,13 +128,14 @@ function startGame(selectedWords) {
 startBtn.onclick = () => {
   const selectedWords = Array.from(wordSelectionEl.querySelectorAll("input:checked"))
     .map(input => input.value);
-
+  counterEl.style.display = "none";
   startGame(selectedWords);
 };
 
 // Кнопка "RANDOM CARD"
 randomBtn.onclick = () => {
   const randomWords = [...allWords].sort(() => Math.random() - 0.5).slice(0, 24);
+  counterEl.style.display = "none";
   startGame(randomWords);
 };
 
