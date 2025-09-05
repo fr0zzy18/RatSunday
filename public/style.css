@@ -158,9 +158,10 @@ h1 {
   text-align: center;
 }
 
+
 #checkbox-counter {
   position: absolute;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0, 0, 0, 0.8);
   color: #fff;
   padding: 6px 10px;
   border-radius: 6px;
@@ -169,3 +170,4 @@ h1 {
   pointer-events: none; /* щоб не заважав клікам */
   z-index: 9999;
 }
+

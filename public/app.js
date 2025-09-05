@@ -67,6 +67,7 @@ function updateCounter() {
   } else {
     counterEl.style.display = "none";
   }
+
 }
 
 // Слухаємо вибір чекбоксів
