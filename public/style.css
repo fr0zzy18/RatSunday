@@ -126,11 +126,13 @@ h1 {
   background: #f5f5f5;
   border: 2px solid #ccc;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.1rem;
   font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding:8px; 
+  box-sizing: border-box;
   cursor: pointer;
   transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
 }
@@ -139,7 +141,7 @@ h1 {
   background: #e0e0e0;
 }
 
-/* Виділена клітинка */
+
 .cell.marked {
   background: #20da29;
   color: #fff;
@@ -154,4 +156,16 @@ h1 {
   font-size: 1.2rem;
   font-weight: bold;
   text-align: center;
+}
+
+#checkbox-counter {
+  position: absolute;
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  pointer-events: none; /* щоб не заважав клікам */
+  z-index: 9999;
 }

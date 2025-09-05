@@ -20,7 +20,7 @@ const allWords = [
   "Marko calling, Dread not saying anything","Dan is explaining how he messed up",'"Come on Lich"',"An argument on boss strategy","This X is a (total) joke",
   "Just follow the fucking raid plan", "Dan dies", '"I fucking HATE weak auras"', '"Simply do not die"', '"This boss is so fucking boring"', "Dread rants about people not playing properly",
   "Soob changed weak auras", "Wipe below 5%", "Tulula dies", "Dread blames Maxi", '"I do not make such mistakes"', "Melon suggests actually good strategy", "Boss dies",
-  "Wolfi late or absent without warning", "Someone leaves mid-raid with a scandal", "Katy Perry is mentioned", "Dread does not know boss mechanic", "Wrong BL", "Markos monitor is dead(again)"
+  "Wolfi late or absent without warning", "Someone leaves mid-raid with a scandal", "Katy Perry is mentioned", "Dread does not know boss mechanic", "Wrong BL", "Markos monitor is dead (again)"
 ];
 
 let playerCells = [];
@@ -52,6 +52,35 @@ allWords.forEach(word => {
   wordSelectionEl.appendChild(document.createElement("br"));
 });
 
+// Створюємо лічильник
+const counterEl = document.createElement("div");
+counterEl.id = "checkbox-counter";
+counterEl.style.display = "none"; // схований за замовчуванням
+document.body.appendChild(counterEl);
+
+// Оновлення лічильника
+function updateCounter() {
+  const checked = wordSelectionEl.querySelectorAll("input:checked").length;
+  if (checked > 0) {
+    counterEl.style.display = "block";
+    counterEl.textContent = `${checked}/24`;
+  } else {
+    counterEl.style.display = "none";
+  }
+}
+
+// Слухаємо вибір чекбоксів
+allWords.forEach(word => {
+  const checkbox = document.getElementById(word);
+  checkbox.addEventListener("change", updateCounter);
+});
+
+// Лічильник рухається за курсором
+document.addEventListener("mousemove", (e) => {
+  counterEl.style.left = e.pageX + 15 + "px";
+  counterEl.style.top = e.pageY + 15 + "px";
+});
+
 // Загальна функція старту гри
 function startGame(selectedWords) {
   myNickname = nicknameInput.value.trim();
@@ -76,7 +105,7 @@ function startGame(selectedWords) {
   let wordIndex = 0;
   for (let i = 0; i < 25; i++) {
     if (i === 12) { // центр
-      playerBoard.push({ word: "EMPTY SPACE", marked: true });
+      playerBoard.push({ word: "FREE SPACE", marked: true });
     } else {
       playerBoard.push({ word: shuffled[wordIndex], marked: false });
       wordIndex++;
@@ -137,7 +166,7 @@ function createBoard(boardEl, boardData, cellArr, readOnly=false){
 
 // Підгонка тексту під клітинку
 function fitTextToCell(cell) {
-  let fontSize = 24;
+  let fontSize = 18;
   cell.style.fontSize = fontSize + "px";
   cell.style.whiteSpace = "normal";
   cell.style.wordBreak = "break-word";
