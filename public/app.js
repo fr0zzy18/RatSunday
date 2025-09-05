@@ -3,6 +3,7 @@ const socket = io();
 const playerBoardEl = document.getElementById("playerBoard");
 const opponentBoardEl = document.getElementById("opponentBoard");
 const startBtn = document.getElementById("startGameBtn");
+const randomBtn = document.getElementById("randomGameBtn");
 const wordSelectionEl = document.getElementById("word-selection");
 const setupDiv = document.getElementById("setup");
 const gameDiv = document.getElementById("game");
@@ -12,13 +13,13 @@ const playerTitle = document.getElementById("playerTitle");
 const opponentTitle = document.getElementById("opponentTitle");
 
 const allWords = [
-  "Soob dies",'"Guys pls just focus"',"Checking dps on adds","Some ppl don't soak","Tanks fucked up",
-  '"Just listen to my calls"',"Tank dies","Threatens to replace someone",'"It is not a rocket science"',"They are not popping defensives",
-  "An argument about wipe reasons",'"Ress that noob"','"This is unacceptable guys"',"Checking dying logs",'"We can not keep play like this"',
-  "Zergg dies",'"That deaths are completely avoidable"',"Some dumb Blizzard bug messed up Dread",'"How can you die to this mechanic"','"I will recruit a few more people"',
-  "Marko calling, Dread not saying anything","Dan is telling what he messed up",'"Come on Lich"',"An argument on boss strategy","This X is a (total) joke",
+  "Soob dies",'"Guys pls just focus"',"Officers/Dread check DPS on adds","Someone forgets to soak","Tanks fuck up",
+  '"Just listen to my calls"',"Tank dies","Dread threatens to replace someone",'"It is not rocket science"',"People don't use defensives and die",
+  "An argument about wipe reasons",'"Ress that noob"','"This is unacceptable guys"',"Checking deaths in logs",'"We can not keep playing like this"',
+  "Zergg dies",'"These deaths are completely avoidable"',"Blizzard bug messes up with Dread",'"How can you die to this mechanic"','"I will recruit few more people"',
+  "Marko calling, Dread not saying anything","Dan is explaining how he messed up",'"Come on Lich"',"An argument on boss strategy","This X is a (total) joke",
   "Just follow the fucking raid plan", "Dan dies", '"I fucking HATE weak auras"', '"Simply do not die"', '"This boss is so fucking boring"', "Dread rants about people not playing properly",
-  "Soob changed weak auras", "Wipe below 5%", "Tulula dies", "Dread blames Maxi", '"I do not make suck mistakes"', "Melon suggests another good strategy", "Boss dies",
+  "Soob changed weak auras", "Wipe below 5%", "Tulula dies", "Dread blames Maxi", '"I do not make such mistakes"', "Melon suggests actually good strategy", "Boss dies",
   "Wolfi late or absent without warning", "Someone leaves mid-raid with a scandal", "Katy Perry is mentioned", "Dread does not know boss mechanic", "Wrong BL", "Markos monitor is dead(again)"
 ];
 
@@ -27,7 +28,7 @@ let opponentCells = [];
 let playerBoard = [];
 let myNickname = "";
 
-// Генеруємо вибір слів (чекбокси)
+// Генерація вибору слів (чекбокси)
 allWords.forEach(word => {
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
@@ -51,18 +52,15 @@ allWords.forEach(word => {
   wordSelectionEl.appendChild(document.createElement("br"));
 });
 
-// Старт гри
-startBtn.onclick = () => {
+// Загальна функція старту гри
+function startGame(selectedWords) {
   myNickname = nicknameInput.value.trim();
   if (!myNickname) {
     alert("Enter your name");
     return;
   }
 
-  const selectedWords = Array.from(wordSelectionEl.querySelectorAll("input:checked"))
-    .map(input => input.value);
-
-  if(selectedWords.length !== 24){
+  if (selectedWords.length !== 24) {
     alert("Pick 24 options");
     return;
   }
@@ -70,14 +68,14 @@ startBtn.onclick = () => {
   setupDiv.style.display = "none";
   gameDiv.style.display = "block";
 
-  // Перемішуємо вибрані слова
+  // Решафл слів
   const shuffled = [...selectedWords].sort(() => Math.random() - 0.5);
 
-  // Вставляємо слова у випадкові клітинки, крім центру
+  // Формування картки
   playerBoard = [];
   let wordIndex = 0;
   for (let i = 0; i < 25; i++) {
-    if (i === 12) { // центральна клітинка
+    if (i === 12) { // центр
       playerBoard.push({ word: "EMPTY SPACE", marked: true });
     } else {
       playerBoard.push({ word: shuffled[wordIndex], marked: false });
@@ -85,14 +83,30 @@ startBtn.onclick = () => {
     }
   }
 
-  // Заголовок для своєї картки
-  playerTitle.textContent = `Card ${myNickname}`;
+  // Заголовок картки
+  playerTitle.textContent = `${myNickname}`;
 
+  // Малюєм свою картку
+  playerCells = [];
   createBoard(playerBoardEl, playerBoard, playerCells, false);
 
-  // Надсилаємо серверу свою картку і нік
+  // Надсилаєм серверу
   socket.emit('setBoard', { board: playerBoard, nickname: myNickname });
   socket.emit('joinGame');
+}
+
+// Кнопка "Make your own card"
+startBtn.onclick = () => {
+  const selectedWords = Array.from(wordSelectionEl.querySelectorAll("input:checked"))
+    .map(input => input.value);
+
+  startGame(selectedWords);
+};
+
+// Кнопка "RANDOM CARD"
+randomBtn.onclick = () => {
+  const randomWords = [...allWords].sort(() => Math.random() - 0.5).slice(0, 24);
+  startGame(randomWords);
 };
 
 // Створення картки
@@ -141,7 +155,7 @@ socket.on('opponentBoard', ({ board, nickname }) => {
   createBoard(opponentBoardEl, board, opponentCells, true);
 
   opponentTitle.textContent = `Card ${nickname}`;
-  statusEl.textContent = "Someone connected!";
+  statusEl.textContent = `${nickname} connected!`;
 });
 
 // Оновлення клітинки суперника
@@ -153,7 +167,7 @@ socket.on('opponentMark', (index) => {
 
 // Суперник відключився
 socket.on('opponentDisconnected', () => {
-  statusEl.textContent = "Someone disconnected.";
+  statusEl.textContent = `Opponent disconnected.`;
 });
 
 // Перевірка BINGO
@@ -161,21 +175,21 @@ function checkBingo(){
   const b = playerBoard.map(c => c.marked);
   const size = 5;
 
-  // Горизонталі
+  // Горизонталь
   for(let i=0;i<size;i++){
     if(b.slice(i*size, i*size+size).every(Boolean)){
       alert("You win!");
       return;
     }
   }
-  // Вертикалі
+  // Вертикаль
   for(let i=0;i<size;i++){
     if([...Array(size)].map((_,j)=>b[i+j*size]).every(Boolean)){
       alert("You win!");
       return;
     }
   }
-  // Діагоналі
+  // Діагональ
   if([...Array(size)].map((_,i)=>b[i*size+i]).every(Boolean) ||
      [...Array(size)].map((_,i)=>b[(i+1)*(size-1)]).every(Boolean)){
     alert("You win!");
