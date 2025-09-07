@@ -64,10 +64,17 @@ function updateCounter() {
   if (checked > 0) {
     counterEl.style.display = "block";
     counterEl.textContent = `${checked}/24`;
+
+    if (checked === 24) {
+      counterEl.style.background = "rgba(76, 175, 80, 0.8)"; 
+      counterEl.style.color = "#fff";
+    } else {
+      counterEl.style.background = "rgba(0, 0, 0, 0.8)"; 
+      counterEl.style.color = "#fff";
+    }
   } else {
     counterEl.style.display = "none";
   }
-
 }
 
 // Слухаємо вибір чекбоксів
@@ -185,7 +192,7 @@ socket.on('opponentBoard', ({ board, nickname }) => {
   opponentCells = [];
   createBoard(opponentBoardEl, board, opponentCells, true);
 
-  opponentTitle.textContent = `Card ${nickname}`;
+  opponentTitle.textContent = `${nickname}`;
   statusEl.textContent = `${nickname} connected!`;
 });
 
