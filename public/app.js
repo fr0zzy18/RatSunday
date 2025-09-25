@@ -192,7 +192,7 @@ socket.on('opponentBoard', ({ board, nickname }) => {
   opponentCells = [];
   createBoard(opponentBoardEl, board, opponentCells, true);
 
-  opponentTitle.textContent = `${nickname}`;
+  opponentTitle.textContent = `Card ${nickname}`;
   statusEl.textContent = `${nickname} connected!`;
 });
 
